@@ -32,6 +32,8 @@ Returns all fields and values of the hash stored at key. In the returned value, 
 hincrby
 Increments the number stored at field in the hash stored at key by increment. If key does not exist, a new key holding a hash is created. If field does not exist the value is set to 0 before the operation is performed.
 
+sadd
+Add the specified members to the set stored at key. Specified members that are already a member of this set are ignored. If key does not exist, a new set is created before adding the specified members.
 
 commands
 hgetall entry:5825c923-6c05-4037-9587-a7e5a09ddd20
@@ -39,3 +41,5 @@ hgetall entry:5825c923-6c05-4037-9587-a7e5a09ddd20
 keys *
 
 flushdb
+
+smembers entry:ffa96f10-86b5-4533-a8f9-040732456fcf:entered

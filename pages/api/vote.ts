@@ -2,9 +2,11 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import {Entry, ENTRY_EXPIRY} from "@/app/types";
 import {kv} from "@vercel/kv";
 import {getSSLHubRpcClient, Message} from "@farcaster/hub-nodejs";
+import { NeynarAPIClient } from "@neynar/nodejs-sdk";
 
 const HUB_URL = process.env['HUB_URL']
 const client = HUB_URL ? getSSLHubRpcClient(HUB_URL) : undefined;
+const neynarClient = new NeynarAPIClient(process.env.NEYNAR_API_KEY);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
@@ -55,12 +57,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             const voteExists = await kv.sismember(`entry:${entryId}:entered`, fid)
             entered = entered || !!voteExists
-            console.log({fid, buttonId, results, entered})
+            const channelFollowers = await neynarClient.fetchFollowersForAChannel('links', {limit: 1000});
+            const isFollowingChannel = !!channelFollowers.users.filter(user => user.fid === fid).length
+            
+            console.log({fid, buttonId, results, entered, isFollowingChannel})
 
-            if (fid > 0 && buttonId > 0 && buttonId < 5 && !results && !entered) {
+            if (fid > 0 && buttonId > 0 && buttonId < 5 && !results && !entered && isFollowingChannel) {
                 let multi = kv.multi();
-                // TODO modify this
-                multi.hincrby(`entry:${entryId}`, `votes${buttonId}`, 1);
                 multi.sadd(`entry:${entryId}:entered`, fid);
                 multi.expire(`entry:${entryId}`, ENTRY_EXPIRY);
                 multi.expire(`entry:${entryId}:entered`, ENTRY_EXPIRY);

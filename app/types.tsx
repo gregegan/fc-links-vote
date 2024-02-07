@@ -1,15 +1,10 @@
-export type Poll = {
+export type Entry = {
   id: string;
   title: string;
   option1: string;
-  option2: string;
-  option3: string;
-  option4: string;
-  votes1: number;
-  votes2: number;
-  votes3: number;
-  votes4: number;
+  required_channel: string;
   created_at: number;
-};
+  end_at: number;
+}
 
-export const POLL_EXPIRY = 60 * 60 * 24 * 180; // Expire polls after 3 months
+export const ENTRY_EXPIRY = 60 * 60 * 24 * 180; // Expire polls after 3 months

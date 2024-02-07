@@ -1,4 +1,4 @@
-import {PollCreateForm} from "./form";
+import { EntryCreateForm } from "./EntryForm";
 
 export let metadata = {
   title: "Farcaster polls",
@@ -34,13 +34,13 @@ export default async function Page() {
           <VercelLogo className="h-8 sm:h-16 invert p-3 mb-1" />
         </div>
         <h1 className="text-lg sm:text-2xl font-bold mb-2">
-          Farcaster Polls
+          Farcaster Enter To Win
         </h1>
         <h2 className="text-md sm:text-xl mx-4">
-          Create a new poll with upto 4 options
+          Create a new entry to collect a database of people to win a prize if they join a channel and submit an entry
         </h2>
         <div className="flex flex-wrap items-center justify-around max-w-4xl my-8 sm:w-full bg-white rounded-md shadow-xl h-full border border-gray-100">
-          <PollCreateForm />
+          <EntryCreateForm />
         </div>
       </main>
     </div>

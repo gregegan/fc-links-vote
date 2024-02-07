@@ -66,7 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     padding: 20,
                 }}>
                     <h2 style={{textAlign: 'center', color: 'lightgray'}}>{entry.title}</h2>
-                    <div>FID: {`${fid}`} entered to win!</div>
+                    <div>FID:{fid} entered to win!</div>
                     {/*{showResults ? <h3 style={{color: "darkgray"}}>Total votes: {totalVotes}</h3> : ''}*/}
                 </div>
             </div>

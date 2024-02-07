@@ -28,3 +28,14 @@ Returns the value associated with field in the hash stored at key.
 
 hgetall
 Returns all fields and values of the hash stored at key. In the returned value, every field name is followed by its value, so the length of the reply is twice the size of the hash.
+
+hincrby
+Increments the number stored at field in the hash stored at key by increment. If key does not exist, a new key holding a hash is created. If field does not exist the value is set to 0 before the operation is performed.
+
+
+commands
+hgetall entry:5825c923-6c05-4037-9587-a7e5a09ddd20
+
+keys *
+
+flushdb

@@ -46,6 +46,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 fid = req.body?.untrustedData?.fid || 0;
             }
 
+            console.log({fid: validatedMessage?.data?.fid, untrustedFid: req.body?.untrustedData?.fid})
+
             // Clicked create entry
             if ((results || entered) && buttonId === 2) {
                 return res.status(302).setHeader('Location', `${process.env['HOST']}`).send('Redirecting to create poll');

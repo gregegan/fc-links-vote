@@ -12,7 +12,7 @@ let fontData = fs.readFileSync(fontPath)
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         const entryId = req.query['id']
-        const fid = parseInt(req.query['fid']?.toString() || '')
+        // const fid = parseInt(req.query['fid']?.toString() || '')
         if (!entryId) {
             return res.status(400).send('Missing entry ID');
         }
@@ -66,7 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     padding: 20,
                 }}>
                     <h2 style={{textAlign: 'center', color: 'lightgray'}}>{entry.title}</h2>
-                    <div>FID:{fid} entered to win!</div>
+                    <div>FID entered to win!</div>
                     {/*{showResults ? <h3 style={{color: "darkgray"}}>Total votes: {totalVotes}</h3> : ''}*/}
                 </div>
             </div>

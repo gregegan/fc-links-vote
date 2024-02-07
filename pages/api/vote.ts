@@ -57,7 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             const voteExists = await kv.sismember(`entry:${entryId}:entered`, fid)
             entered = entered || !!voteExists
-            const channelFollowers = await neynarClient.fetchFollowersForAChannel('links', {limit: 1000});
+            const channelFollowers = await neynarClient.fetchFollowersForAChannel('zora', {limit: 1000});
             const isFollowingChannel = !!channelFollowers.users.filter(user => user.fid === fid).length
             
             console.log({fid, buttonId, results, entered, isFollowingChannel})

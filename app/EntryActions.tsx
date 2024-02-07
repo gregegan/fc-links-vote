@@ -14,6 +14,8 @@ export async function saveEntry(entry: Entry, formData: FormData) {
     option1: formData.get("option1") as string,
     required_channel: formData.get("requiredChannel") as string || "",
   }
+  
+  // Sets the specified fields to their respective values in the hash stored at key.
   await kv.hset(`entry:${entry.id}`, entry);
   await kv.expire(`entry:${entry.id}`, ENTRY_EXPIRY);
   await kv.zadd("entries_by_date", { // TODO
@@ -26,6 +28,7 @@ export async function saveEntry(entry: Entry, formData: FormData) {
 }
 
 export async function voteEntry(entry: Entry, optionIndex: number) {
+  console.log({entry, optionIndex})
   await kv.hincrby(`entry:${entry.id}`, `votes${optionIndex}`, 1); // TODO
 
   revalidatePath(`/entries/${entry.id}`);

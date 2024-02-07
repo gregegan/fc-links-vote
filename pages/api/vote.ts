@@ -53,6 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             const voteExists = await kv.sismember(`entry:${entryId}:entered`, fid)
             entered = entered || !!voteExists
+            console.log({fid, buttonId, results, entered})
 
             if (fid > 0 && buttonId > 0 && buttonId < 5 && !results && !entered) {
                 let multi = kv.multi();

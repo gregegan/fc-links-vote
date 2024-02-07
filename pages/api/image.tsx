@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import sharp from 'sharp';
-import {Poll} from "@/app/types";
+import {Entry} from "@/app/types";
 import {kv} from "@vercel/kv";
 import satori from "satori";
 import { join } from 'path';
@@ -11,37 +11,37 @@ let fontData = fs.readFileSync(fontPath)
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const pollId = req.query['id']
+        const entryId = req.query['id']
         // const fid = parseInt(req.query['fid']?.toString() || '')
-        if (!pollId) {
-            return res.status(400).send('Missing poll ID');
+        if (!entryId) {
+            return res.status(400).send('Missing entry ID');
         }
 
-        let poll: Poll | null = await kv.hgetall(`poll:${pollId}`);
+        let entry: Entry | null = await kv.hgetall(`entry:${entryId}`);
 
 
-        if (!poll) {
-            return res.status(400).send('Missing poll ID');
+        if (!entry) {
+            return res.status(400).send('Missing entry ID');
         }
 
         const showResults = req.query['results'] === 'true'
         // let votedOption: number | null = null
         // if (showResults && fid > 0) {
-        //     votedOption = await kv.hget(`poll:${pollId}:votes`, `${fid}`) as number
+        //     votedOption = await kv.hget(`entry:${entryId}:votes`, `${fid}`) as number
         // }
 
-        const pollOptions = [poll.option1, poll.option2, poll.option3, poll.option4]
+        const entryOptions = [entry.option1]
             .filter((option) => option !== '');
-        const totalVotes = pollOptions
+        const totalVotes = entryOptions
             // @ts-ignore
-            .map((option, index) => parseInt(poll[`votes${index+1}`]))
+            .map((option, index) => parseInt(entry[`votes${index+1}`]))
             .reduce((a, b) => a + b, 0);
-        const pollData = {
-            question: showResults ? `Results for ${poll.title}` : poll.title,
-            options: pollOptions
+        const entryData = {
+            question: showResults ? `Results for ${entry.title}` : entry.title,
+            options: entryOptions
                 .map((option, index) => {
                     // @ts-ignore
-                    const votes = poll[`votes${index+1}`]
+                    const votes = entry[`votes${index+1}`]
                     const percentOfTotal = totalVotes ? Math.round(votes / totalVotes * 100) : 0;
                     let text = showResults ? `${percentOfTotal}%: ${option} (${votes} votes)` : `${index + 1}. ${option}`
                     return { option, votes, text, percentOfTotal }
@@ -65,9 +65,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     flexDirection: 'column',
                     padding: 20,
                 }}>
-                    <h2 style={{textAlign: 'center', color: 'lightgray'}}>{poll.title}</h2>
+                    <h2 style={{textAlign: 'center', color: 'lightgray'}}>{entry.title}</h2>
                     {
-                        pollData.options.map((opt, index) => {
+                        entryData.options.map((opt, index) => {
                             return (
                                 <div style={{
                                     backgroundColor:  showResults ? '#007bff' : '',

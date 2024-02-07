@@ -55,12 +55,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return res.status(302).setHeader('Location', `${process.env['HOST']}`).send('Redirecting to create poll');
             }
 
+            let isFollowingChannel
+            const requiredChannelFollow = await kv.hget(`entry:${entryId}`, 'required_channel') as string
+
+            // check if user is in the defined channel
+            if (requiredChannelFollow != '') {
+              const channelFollowers = await neynarClient.fetchFollowersForAChannel(requiredChannelFollow, {limit: 1000});
+              isFollowingChannel = !!channelFollowers.users.filter(user => user.fid === fid).length
+            }
+
+            console.log({requiredChannelFollow, isFollowingChannel})
+
+            // check if user already voted
             const voteExists = await kv.sismember(`entry:${entryId}:entered`, fid)
             entered = entered || !!voteExists
-            const channelFollowers = await neynarClient.fetchFollowersForAChannel('zora', {limit: 1000});
-            const isFollowingChannel = !!channelFollowers.users.filter(user => user.fid === fid).length
             
-            console.log({fid, buttonId, results, entered, isFollowingChannel})
+            console.log({fid, buttonId, results, entered})
 
             if (fid > 0 && buttonId > 0 && buttonId < 5 && !results && !entered && isFollowingChannel) {
                 let multi = kv.multi();
@@ -77,10 +87,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
             const imageUrl = `${process.env['HOST']}/api/image?id=${entry.id}&results=${results ? 'false': 'true'}&date=${Date.now()}${ fid > 0 ? `&fid=${fid}` : '' }`;
             let button1Text = "View Results";
-            if (!entered && !results) {
+            if (requiredChannelFollow != '' && !isFollowingChannel) {
+              button1Text = `Not in channel /${requiredChannelFollow}`
+            } else if (!entered && !results) {
                 button1Text = "Back"
-            } else if (!isFollowingChannel) {
-              button1Text = "Not in channel /links"
             } else if (entered && !results) {
                 button1Text = "Already entered"
             } else if (entered && results) {

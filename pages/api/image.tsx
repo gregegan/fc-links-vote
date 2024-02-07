@@ -12,7 +12,7 @@ let fontData = fs.readFileSync(fontPath)
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         const entryId = req.query['id']
-        // const fid = parseInt(req.query['fid']?.toString() || '')
+        const fid = parseInt(req.query['fid']?.toString() || '')
         if (!entryId) {
             return res.status(400).send('Missing entry ID');
         }
@@ -66,22 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     padding: 20,
                 }}>
                     <h2 style={{textAlign: 'center', color: 'lightgray'}}>{entry.title}</h2>
-                    {
-                        entryData.options.map((opt, index) => {
-                            return (
-                                <div style={{
-                                    backgroundColor:  showResults ? '#007bff' : '',
-                                    color: '#fff',
-                                    padding: 10,
-                                    marginBottom: 10,
-                                    borderRadius: 4,
-                                    width: `${showResults ? opt.percentOfTotal : 100}%`,
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'visible',
-                                }}>{opt.text}</div>
-                            )
-                        })
-                    }
+                    <div>FID: {`${fid}`} entered to win!</div>
                     {/*{showResults ? <h3 style={{color: "darkgray"}}>Total votes: {totalVotes}</h3> : ''}*/}
                 </div>
             </div>

@@ -59,6 +59,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             if (fid > 0 && buttonId > 0 && buttonId < 5 && !results && !entered) {
                 let multi = kv.multi();
+                // TODO modify this
                 multi.hincrby(`entry:${entryId}`, `votes${buttonId}`, 1);
                 multi.sadd(`entry:${entryId}:entered`, fid);
                 multi.expire(`entry:${entryId}`, ENTRY_EXPIRY);
@@ -94,11 +95,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           <meta name="fc:frame:image" content="${imageUrl}">
           <meta name="fc:frame:post_url" content="${process.env['HOST']}/api/vote?id=${entry.id}&entered=true&results=${results ? 'false' : 'true'}">
           <meta name="fc:frame:button:1" content="${button1Text}">
-          <meta name="fc:frame:button:2" content="Create your poll">
+          <meta name="fc:frame:button:2" content="Create your own entry">
           <meta name="fc:frame:button:2:action" content="post_redirect">
         </head>
         <body>
-          <p>${ results || entered ? `You have already entered. You clicked ${buttonId}` : `Your vote for ${buttonId} has been recorded for fid ${fid}.` }</p>
+          <p>${ results || entered ? `You have already entered. You clicked ${buttonId}` : `Your entry for ${buttonId} has been recorded for fid ${fid}.` }</p>
         </body>
       </html>
     `);

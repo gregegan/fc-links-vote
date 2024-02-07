@@ -79,6 +79,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             let button1Text = "View Results";
             if (!entered && !results) {
                 button1Text = "Back"
+            } else if (!isFollowingChannel) {
+              button1Text = "Not in channel /links"
             } else if (entered && !results) {
                 button1Text = "Already entered"
             } else if (entered && results) {

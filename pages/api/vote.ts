@@ -6,7 +6,7 @@ import { NeynarAPIClient } from "@neynar/nodejs-sdk";
 
 const HUB_URL = process.env['HUB_URL']
 const client = HUB_URL ? getSSLHubRpcClient(HUB_URL) : undefined;
-const neynarClient = new NeynarAPIClient(process.env.NEYNAR_API_KEY);
+const neynarClient = new NeynarAPIClient(process.env.NEYNAR_API_KEY || "");
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {

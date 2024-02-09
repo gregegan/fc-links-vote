@@ -72,6 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             console.log({fid, buttonId, results, entered})
 
+            //todo add requiredChannelFollow check
             if (fid > 0 && buttonId > 0 && buttonId < 5 && !results && !entered && isFollowingChannel) {
                 let multi = kv.multi();
                 multi.sadd(`entry:${entryId}:entered`, fid);
